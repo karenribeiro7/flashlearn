@@ -1,0 +1,8 @@
+{
+  "expo": {
+    "name": "flashlearn-app",
+    "slug": "flashlearn-app",
+    "version": "1.0.0",
+    "orientation": "portrait"
+  }
+}

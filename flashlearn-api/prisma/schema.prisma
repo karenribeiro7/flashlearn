@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  role          String         @default("user")
+  decks         Deck[]
+  studySessions StudySession[]
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  decks Deck[]
+}
+
+model Deck {
+  id            Int            @id @default(autoincrement())
+  title         String
+  description   String?
+  userId        Int
+  user          User           @relation(fields: [userId], references: [id])
+  categoryId    Int
+  category      Category       @relation(fields: [categoryId], references: [id])
+  flashcards    Flashcard[]
+  studySessions StudySession[]
+}
+
+model Flashcard {
+  id       Int    @id @default(autoincrement())
+  question String
+  answer   String
+  deckId   Int
+  deck     Deck   @relation(fields: [deckId], references: [id])
+}
+
+model StudySession {
+  id           Int      @id @default(autoincrement())
+  durationSecs Int
+  totalCards   Int
+  correctCards Int
+  createdAt    DateTime @default(now())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  deckId       Int
+  deck         Deck     @relation(fields: [deckId], references: [id])
+}
