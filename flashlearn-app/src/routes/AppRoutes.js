@@ -3,12 +3,25 @@ import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext } from "../context/AuthContext";
+import RegisterScreen from "../screens/RegisterScreen";
 
 const Stack = createStackNavigator();
 
 function AuthStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#161B22" },
+        headerTintColor: "#4F8EF7",
+        headerTitleStyle: { color: "#F0F6FC", fontWeight: "600" },
+        headerShadowVisible: false,
+      }}
+    >
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{ title: "Cadastro" }}
+      />
     </Stack.Navigator>
   );
 }
@@ -25,8 +38,8 @@ export default function AppRoutes() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#0f0f1a", justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ color: "#fff" }}>Carregando...</Text>
+      <View style={{ flex: 1, backgroundColor: "#0D1117", justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ color: "#F0F6FC" }}>Carregando...</Text>
       </View>
     );
   }
