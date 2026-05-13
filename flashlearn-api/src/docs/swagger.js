@@ -80,3 +80,40 @@ module.exports = swaggerSpec;
  *       409:
  *         description: Email ja cadastrado
  */
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Realiza o login e retorna o token JWT
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: joao@email.com
+ *               password:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Login realizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Todos os campos sao obrigatorios
+ *       401:
+ *         description: Email ou senha invalidos
+ */
