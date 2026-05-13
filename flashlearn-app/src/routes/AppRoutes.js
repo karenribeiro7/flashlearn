@@ -3,8 +3,10 @@ import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext } from "../context/AuthContext";
-import RegisterScreen from "../screens/RegisterScreen";
+import WelcomeScreen from "../screens/WelcomeScreen";
 import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import HomeScreen from "../screens/HomeScreen";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +20,11 @@ function AuthStack() {
         headerShadowVisible: false,
       }}
     >
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -34,7 +41,19 @@ function AuthStack() {
 
 function AppStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#161B22" },
+        headerTintColor: "#4F8EF7",
+        headerTitleStyle: { color: "#F0F6FC", fontWeight: "600" },
+        headerShadowVisible: false,
+      }}
+    >
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
