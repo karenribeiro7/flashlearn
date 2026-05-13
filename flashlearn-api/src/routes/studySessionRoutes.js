@@ -1,10 +1,9 @@
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
 
-const {
-  startStudySession,
-} = require("../controllers/studySessionController");
+const { startStudySession } = require("../controllers/studySessionController");
 
-router.post("/", startStudySession);
+const router = Router();
+
+router.post("/study-sessions", startStudySession);
 
 module.exports = router;

@@ -11,6 +11,6 @@ app.use(cors());
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api", userRoutes);
-app.use("/api/study-sessions", studySessionRoutes);
+app.use("/api", studySessionRoutes);
 
 module.exports = app;
