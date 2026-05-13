@@ -47,12 +47,12 @@ export default function RegisterScreen({ navigation }) {
 
       <View style={styles.form}>
         <View style={styles.fieldGroup}>
-          <Text style={styles.label}>NOME COMPLETO</Text>
+          <Text style={styles.label}>NOME</Text>
           <TextInput
             style={styles.input}
             value={name}
             onChangeText={setName}
-            placeholder="Seu nome completo"
+            placeholder="Seu nome"
             placeholderTextColor="#484F58"
             autoCapitalize="words"
           />
