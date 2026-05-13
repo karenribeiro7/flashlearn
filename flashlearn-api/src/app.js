@@ -3,6 +3,7 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./docs/swagger");
 const userRoutes = require("./routes/userRoutes");
+const studySessionRoutes = require("./routes/studySessionRoutes");
 
 const app = express();
 
@@ -10,5 +11,6 @@ app.use(cors());
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api", userRoutes);
+app.use("/api/study-sessions", studySessionRoutes);
 
 module.exports = app;
