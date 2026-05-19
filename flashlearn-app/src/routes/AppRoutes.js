@@ -7,6 +7,10 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
+import DeckListScreen from "../screens/DeckListScreen";
+import DeckFormScreen from "../screens/DeckFormScreen";
+import FlashcardListScreen from "../screens/FlashcardListScreen";
+import FlashcardFormScreen from "../screens/FlashcardFormScreen";
 import StudyScreen from "../screens/StudyScreen";
 import StudyResultScreen from "../screens/StudyResultScreen";
 
@@ -55,6 +59,28 @@ function AppStack() {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="DeckList"
+        component={DeckListScreen}
+        options={{ title: "Meus decks" }}
+      />
+      <Stack.Screen
+        name="DeckForm"
+        component={DeckFormScreen}
+        options={({ route }) => ({
+          title: route.params?.deck?.id ? "Editar deck" : "Novo deck",
+        })}
+      />
+      <Stack.Screen
+        name="FlashcardList"
+        component={FlashcardListScreen}
+        options={{ title: "Flashcards" }}
+      />
+      <Stack.Screen
+        name="FlashcardForm"
+        component={FlashcardFormScreen}
+        options={{ title: "Novo flashcard" }}
       />
       <Stack.Screen
         name="Study"
