@@ -6,7 +6,6 @@ import { AuthContext } from "../context/AuthContext";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
-import HomeScreen from "../screens/HomeScreen";
 import DeckListScreen from "../screens/DeckListScreen";
 import DeckFormScreen from "../screens/DeckFormScreen";
 import FlashcardListScreen from "../screens/FlashcardListScreen";
@@ -55,11 +54,6 @@ function AppStack() {
         headerShadowVisible: false,
       }}
     >
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen
         name="DeckList"
         component={DeckListScreen}
