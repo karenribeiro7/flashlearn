@@ -97,6 +97,7 @@ export default function StudyScreen({ route, navigation }) {
     setCurrentIndex(0);
     resetCard();
   }
+  
 
   function resetCard() {
     flipAnim.setValue(0);
@@ -159,7 +160,7 @@ export default function StudyScreen({ route, navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Sessao de Estudo</Text>
         <Text style={styles.headerCounter}>
-          {flashcards.length - sessionCards.length} de {flashcards.length}
+          {sessionCards.length} {sessionCards.length===1 ? " card restante" : " cards restantes"}
         </Text>
       </View>
 

@@ -76,9 +76,9 @@ module.exports = swaggerSpec;
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Todos os campos sao obrigatorios
+ *         description: Todos os campos são obrigatórios
  *       409:
- *         description: Email ja cadastrado
+ *         description: Email já cadastrado
  */
 /**
  * @swagger
@@ -113,7 +113,127 @@ module.exports = swaggerSpec;
  *                 token:
  *                   type: string
  *       400:
- *         description: Todos os campos sao obrigatorios
+ *         description: Todos os campos são obrigatórios
  *       401:
- *         description: Email ou senha invalidos
+ *         description: Email ou senha inválidos
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     StudySession:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         userId:
+ *           type: integer
+ *         deckId:
+ *           type: integer
+ *         durationSecs:
+ *           type: integer
+ *         totalCards:
+ *           type: integer
+ *         correctCards:
+ *           type: integer
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
+ * /api/study-sessions/start:
+ *   post:
+ *     summary: Inicia uma sessão de estudo e retorna os flashcards embaralhados
+ *     tags: [Study Sessions]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - deckId
+ *             properties:
+ *               deckId:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Flashcards embaralhados retornados com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 flashcards:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       question:
+ *                         type: string
+ *                       answer:
+ *                         type: string
+ *                       deckId:
+ *                         type: integer
+ *       400:
+ *         description: deckId e obrigatório ou deck não possui flashcards
+ *       401:
+ *         description: Token não informado ou inválido
+ *       404:
+ *         description: Deck não encontrado
+ */
+
+/**
+ * @swagger
+ * /api/study-sessions/finish:
+ *   post:
+ *     summary: Finaliza uma sessao de estudo e registra os dados no banco
+ *     tags: [Study Sessions]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - deckId
+ *               - durationSecs
+ *               - totalCards
+ *               - correctCards
+ *             properties:
+ *               deckId:
+ *                 type: integer
+ *                 example: 1
+ *               durationSecs:
+ *                 type: integer
+ *                 example: 120
+ *               totalCards:
+ *                 type: integer
+ *                 example: 10
+ *               correctCards:
+ *                 type: integer
+ *                 example: 8
+ *     responses:
+ *       201:
+ *         description: Sessao registrada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/StudySession'
+ *       400:
+ *         description: Todos os campos são obrigatórios
+ *       401:
+ *         description: Token não informado ou inválido
+ *       404:
+ *         description: Deck não encontrado
  */
