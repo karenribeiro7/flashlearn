@@ -148,7 +148,7 @@ export default function DeckFormScreen({ navigation }) {
             <ActivityIndicator color="#4F8EF7" style={styles.categoriesLoader} />
           ) : categories.length === 0 ? (
             <Text style={styles.emptyCategories}>
-              Nenhuma categoria no servidor. Na API, execute: npx prisma db seed
+              Nenhuma categoria disponível.
             </Text>
           ) : (
             <View style={styles.chips}>
