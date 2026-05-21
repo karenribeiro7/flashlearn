@@ -9,6 +9,7 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import api from "../services/api";
 
@@ -26,18 +27,30 @@ export default function FlashcardListScreen() {
     navigation.setOptions({
       title: deckTitle,
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("FlashcardForm", { deckId, deckTitle })
-          }
-          style={styles.headerButton}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-        >
-          <Text style={styles.headerButtonText}>Novo</Text>
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            onPress={() => {
+              if (flashcards.length === 0) {
+                Alert.alert("Aviso", "Adicione pelo menos um flashcard antes de estudar.");
+                return;
+              }
+              navigation.navigate("Study", { deckId, deckTitle });
+            }}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
+            <Ionicons name="school-outline" size={22} color="#4F8EF7" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("FlashcardForm", { deckId, deckTitle })}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
+            <Ionicons name="add" size={26} color="#4F8EF7" />
+          </TouchableOpacity>
+        </View>
       ),
     });
-  }, [navigation, deckId, deckTitle]);
+  }, [navigation, deckId, deckTitle, flashcards]);
 
   const loadFlashcards = useCallback(async () => {
     const { data } = await api.get(`/decks/${deckId}/flashcards`);
@@ -50,7 +63,7 @@ export default function FlashcardListScreen() {
     } catch (error) {
       Alert.alert(
         "Erro",
-        error.response?.data?.error || "Não foi possível carregar os flashcards"
+        error.response?.data?.error || "Nao foi possivel carregar os flashcards"
       );
     }
   }, [loadFlashcards]);
@@ -66,7 +79,7 @@ export default function FlashcardListScreen() {
           if (active) {
             Alert.alert(
               "Erro",
-              error.response?.data?.error || "Não foi possível carregar os flashcards"
+              error.response?.data?.error || "Nao foi possivel carregar os flashcards"
             );
           }
         } finally {
@@ -93,8 +106,6 @@ export default function FlashcardListScreen() {
       <View style={styles.card}>
         <Text style={styles.cardLabel}>PERGUNTA</Text>
         <Text style={styles.cardQuestion}>{item.question}</Text>
-        <Text style={[styles.cardLabel, styles.cardLabelAnswer]}>RESPOSTA</Text>
-        <Text style={styles.cardAnswer}>{item.answer}</Text>
       </View>
     );
   }
@@ -109,6 +120,13 @@ export default function FlashcardListScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.summary}>
+        <Text style={styles.summaryCount}>{flashcards.length}</Text>
+        <Text style={styles.summaryLabel}>
+          {flashcards.length === 1 ? "card neste baralho" : "cards neste baralho"}
+        </Text>
+      </View>
+
       <FlatList
         data={flashcards}
         keyExtractor={(item) => String(item.id)}
@@ -125,9 +143,13 @@ export default function FlashcardListScreen() {
           />
         }
         ListEmptyComponent={
-          <Text style={styles.emptyText}>
-            Nenhum flashcard ainda. Toque em Novo para adicionar.
-          </Text>
+          <View style={styles.emptyContainer}>
+            <Ionicons name="card-outline" size={48} color="#484F58" />
+            <Text style={styles.emptyTitle}>Nenhum flashcard ainda</Text>
+            <Text style={styles.emptyText}>
+              Toque em + para adicionar seu primeiro flashcard
+            </Text>
+          </View>
         }
       />
     </View>
@@ -145,6 +167,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  summary: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#21262D",
+  },
+  summaryCount: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#F0F6FC",
+  },
+  summaryLabel: {
+    fontSize: 13,
+    color: "#8B949E",
+    marginTop: 2,
+  },
   list: {
     padding: 16,
     paddingBottom: 32,
@@ -154,9 +192,18 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: "center",
   },
-  emptyText: {
+  emptyContainer: {
+    alignItems: "center",
+    gap: 12,
+  },
+  emptyTitle: {
+    fontSize: 17,
+    fontWeight: "600",
     color: "#8B949E",
-    fontSize: 15,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: "#484F58",
     textAlign: "center",
   },
   card: {
@@ -164,6 +211,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "#30363D",
+    borderLeftWidth: 3,
+    borderLeftColor: "#4F8EF7",
     padding: 16,
     marginBottom: 12,
     gap: 6,
@@ -174,27 +223,16 @@ const styles = StyleSheet.create({
     color: "#8B949E",
     letterSpacing: 1.5,
   },
-  cardLabelAnswer: {
-    marginTop: 8,
-  },
   cardQuestion: {
     fontSize: 16,
     fontWeight: "600",
     color: "#F0F6FC",
     lineHeight: 22,
   },
-  cardAnswer: {
-    fontSize: 15,
-    color: "#C9D1D9",
-    lineHeight: 21,
-  },
-  headerButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  headerButtonText: {
-    color: "#4F8EF7",
-    fontSize: 16,
-    fontWeight: "600",
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    marginRight: 12,
   },
 });
