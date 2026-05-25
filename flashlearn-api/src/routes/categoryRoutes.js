@@ -6,7 +6,7 @@ const adminMiddleware = require("../middlewares/adminMiddleware");
 const router = Router();
 
 router.get("/categories", authMiddleware, listCategories);
-router.post("/categories", authMiddleware, adminMiddleware, createCategory);
-router.delete("/categories/:id", authMiddleware, adminMiddleware, deleteCategory);
+router.post("/categories", authMiddleware, createCategory);
+router.delete("/categories/:id", authMiddleware, deleteCategory);
 
 module.exports = router;

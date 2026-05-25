@@ -333,26 +333,51 @@ module.exports = swaggerSpec;
  * @swagger
  * /api/categories:
  *   get:
- *     summary: Lista categorias disponíveis para decks
- *     tags: [Decks]
+ *     summary: Lista categorias padrao e categorias do usuario autenticado
+ *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de categorias
+ *         description: Lista de categorias retornada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
+ *                 $ref: '#/components/schemas/Category'
  *       401:
- *         description: Token não informado ou inválido
+ *         description: Token nao informado ou invalido
+ *   post:
+ *     summary: Cria uma nova categoria vinculada ao usuario autenticado
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Direito Civil
+ *     responses:
+ *       201:
+ *         description: Categoria criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       400:
+ *         description: Nome e obrigatorio
+ *       401:
+ *         description: Token nao informado ou invalido
+ *       409:
+ *         description: Categoria ja existe
  */
 
 /**
