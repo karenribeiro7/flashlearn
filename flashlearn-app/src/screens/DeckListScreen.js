@@ -27,7 +27,7 @@ export default function DeckListScreen() {
       headerRight: () => (
         <View style={styles.headerActions}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Stats")}
+            onPress={() => navigation.navigate("StudyStats")}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             <Ionicons name="bar-chart-outline" size={22} color="#8B949E" />

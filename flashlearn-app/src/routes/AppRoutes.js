@@ -12,6 +12,7 @@ import FlashcardListScreen from "../screens/FlashcardListScreen";
 import FlashcardFormScreen from "../screens/FlashcardFormScreen";
 import StudyScreen from "../screens/StudyScreen";
 import StudyResultScreen from "../screens/StudyResultScreen";
+import StudyStatsScreen from "../screens/StudyStatsScreen";
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,17 @@ function AppStack() {
         name="StudyResult"
         component={StudyResultScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="StudyStats"
+        component={StudyStatsScreen}
+        options={{
+          title: "Estatísticas",
+          headerStyle: {
+            backgroundColor: "#0D1117",
+          },
+          headerTintColor: "#F0F6FC",
+        }}
       />
     </Stack.Navigator>
   );
