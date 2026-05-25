@@ -47,6 +47,8 @@ async function getStudyStats(req, res) {
         deckPerformanceMap[deckTitle] = {
           totalCorrect: 0,
           totalCards: 0,
+          totalStudySeconds: 0,
+          totalSessions: 0,
         };
       }
 
@@ -55,6 +57,11 @@ async function getStudyStats(req, res) {
 
       deckPerformanceMap[deckTitle].totalCards +=
         session.totalCards;
+
+      deckPerformanceMap[deckTitle].totalStudySeconds +=
+        session.durationSecs;
+
+      deckPerformanceMap[deckTitle].totalSessions += 1;
     });
 
     const deckPerformance = Object.entries(deckPerformanceMap).map(
@@ -64,8 +71,16 @@ async function getStudyStats(req, res) {
           data.totalCards === 0
             ? 0
             : Math.round(
-                (data.totalCorrect / data.totalCards) * 100
-              ),
+              (data.totalCorrect / data.totalCards) * 100
+            ),
+
+        totalStudyHours: (
+          data.totalStudySeconds / 3600
+        ).toFixed(1),
+
+        totalCardsReviewed: data.totalCards,
+
+        totalSessions: data.totalSessions,
       })
     );
 
@@ -78,8 +93,8 @@ async function getStudyStats(req, res) {
         session.totalCards === 0
           ? 0
           : Math.round(
-              (session.correctCards / session.totalCards) * 100
-            ),
+            (session.correctCards / session.totalCards) * 100
+          ),
     }));
 
     return res.json({
