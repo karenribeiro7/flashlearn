@@ -10,6 +10,8 @@ const {
 const {
   listFlashcards,
   createFlashcard,
+  updateFlashcard,
+  deleteFlashcard,
 } = require("../controllers/flashcardController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -20,6 +22,8 @@ router.get("/decks", authMiddleware, listDecks);
 router.post("/decks", authMiddleware, createDeck);
 router.get("/decks/:deckId/flashcards", authMiddleware, listFlashcards);
 router.post("/decks/:deckId/flashcards", authMiddleware, createFlashcard);
+router.put("/decks/:deckId/flashcards/:id", authMiddleware, updateFlashcard);
+router.delete("/decks/:deckId/flashcards/:id", authMiddleware, deleteFlashcard);
 router.put("/decks/:id", authMiddleware, updateDeck);
 router.delete("/decks/:id", authMiddleware, deleteDeck);
 

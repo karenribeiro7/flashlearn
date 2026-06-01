@@ -101,11 +101,68 @@ export default function FlashcardListScreen() {
     }
   }
 
+  function confirmDelete(flashcard) {
+    Alert.alert(
+      "Excluir flashcard",
+      "Remover este flashcard do baralho?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await api.delete(`/decks/${deckId}/flashcards/${flashcard.id}`);
+              await refresh();
+            } catch (error) {
+              Alert.alert(
+                "Erro",
+                error.response?.data?.error || "Nao foi possivel excluir o flashcard"
+              );
+            }
+          },
+        },
+      ]
+    );
+  }
+
   function renderItem({ item }) {
     return (
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>PERGUNTA</Text>
-        <Text style={styles.cardQuestion}>{item.question}</Text>
+        <View style={styles.cardRow}>
+          <View style={styles.cardBody}>
+            <Text style={styles.cardLabel}>PERGUNTA</Text>
+            <Text style={styles.cardQuestion}>{item.question}</Text>
+            <Text style={[styles.cardLabel, styles.cardLabelAnswer]}>RESPOSTA</Text>
+            <Text style={styles.cardAnswer} numberOfLines={2}>
+              {item.answer}
+            </Text>
+          </View>
+          <View style={styles.cardIconActions}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("FlashcardForm", {
+                  deckId,
+                  deckTitle,
+                  flashcard: {
+                    id: item.id,
+                    question: item.question,
+                    answer: item.answer,
+                  },
+                })
+              }
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="pencil-outline" size={22} color="#8B949E" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => confirmDelete(item)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="trash-outline" size={22} color="#F85149" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
@@ -213,9 +270,23 @@ const styles = StyleSheet.create({
     borderColor: "#30363D",
     borderLeftWidth: 3,
     borderLeftColor: "#4F8EF7",
-    padding: 16,
     marginBottom: 12,
+  },
+  cardRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  cardBody: {
+    flex: 1,
+    padding: 16,
+    paddingRight: 8,
     gap: 6,
+  },
+  cardIconActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    paddingRight: 16,
   },
   cardLabel: {
     fontSize: 11,
@@ -223,11 +294,19 @@ const styles = StyleSheet.create({
     color: "#8B949E",
     letterSpacing: 1.5,
   },
+  cardLabelAnswer: {
+    marginTop: 8,
+  },
   cardQuestion: {
     fontSize: 16,
     fontWeight: "600",
     color: "#F0F6FC",
     lineHeight: 22,
+  },
+  cardAnswer: {
+    fontSize: 15,
+    color: "#C9D1D9",
+    lineHeight: 21,
   },
   headerActions: {
     flexDirection: "row",

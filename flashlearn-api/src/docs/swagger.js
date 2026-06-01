@@ -635,3 +635,72 @@ module.exports = swaggerSpec;
  *       404:
  *         description: Deck não encontrado
  */
+
+/**
+ * @swagger
+ * /api/decks/{deckId}/flashcards/{id}:
+ *   put:
+ *     summary: Atualiza um flashcard de um deck do usuário autenticado
+ *     tags: [Flashcards]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deckId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - question
+ *               - answer
+ *             properties:
+ *               question:
+ *                 type: string
+ *               answer:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Flashcard atualizado
+ *       400:
+ *         description: deckId, id ou corpo inválido
+ *       401:
+ *         description: Token não informado ou inválido
+ *       404:
+ *         description: Flashcard não encontrado
+ *   delete:
+ *     summary: Remove um flashcard de um deck do usuário autenticado
+ *     tags: [Flashcards]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deckId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Flashcard removido
+ *       400:
+ *         description: deckId ou id inválido
+ *       401:
+ *         description: Token não informado ou inválido
+ *       404:
+ *         description: Flashcard não encontrado
+ */

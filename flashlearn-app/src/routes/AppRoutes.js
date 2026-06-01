@@ -75,7 +75,9 @@ function AppStack() {
       <Stack.Screen
         name="FlashcardForm"
         component={FlashcardFormScreen}
-        options={{ title: "Novo flashcard" }}
+        options={({ route }) => ({
+          title: route.params?.flashcard?.id ? "Editar flashcard" : "Novo flashcard",
+        })}
       />
       <Stack.Screen
         name="Study"
