@@ -11,7 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 export default function StudyResultScreen({ route, navigation }) {
   const { durationSecs, totalCards, correctCards, deckTitle } = route.params;
 
-  const accuracy = Math.round((correctCards / totalCards) * 100);
+  const accuracy =
+    totalCards === 0 ? 0 : Math.round((correctCards / totalCards) * 100);
 
   function formatTime(secs) {
     const h = Math.floor(secs / 3600);

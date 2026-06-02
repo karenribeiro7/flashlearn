@@ -117,7 +117,98 @@ module.exports = swaggerSpec;
  *       401:
  *         description: Email ou senha inválidos
  */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ */
 
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Lista todas as categorias
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de categorias retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Category'
+ *       401:
+ *         description: Token nao informado ou invalido
+ *   post:
+ *     summary: Cria uma nova categoria
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Exatas
+ *     responses:
+ *       201:
+ *         description: Categoria criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       400:
+ *         description: Nome e obrigatorio
+ *       401:
+ *         description: Token nao informado ou invalido
+ *       403:
+ *         description: Acesso restrito a administradores
+ *       409:
+ *         description: Categoria ja cadastrada
+ */
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Deleta uma categoria
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Categoria deletada com sucesso
+ *       400:
+ *         description: Categoria possui baralhos vinculados
+ *       401:
+ *         description: Token nao informado ou invalido
+ *       403:
+ *         description: Acesso restrito a administradores
+ *       404:
+ *         description: Categoria nao encontrada
+ */
 /**
  * @swagger
  * components:
@@ -242,26 +333,51 @@ module.exports = swaggerSpec;
  * @swagger
  * /api/categories:
  *   get:
- *     summary: Lista categorias disponíveis para decks
- *     tags: [Decks]
+ *     summary: Lista categorias padrao e categorias do usuario autenticado
+ *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de categorias
+ *         description: Lista de categorias retornada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
+ *                 $ref: '#/components/schemas/Category'
  *       401:
- *         description: Token não informado ou inválido
+ *         description: Token nao informado ou invalido
+ *   post:
+ *     summary: Cria uma nova categoria vinculada ao usuario autenticado
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Direito Civil
+ *     responses:
+ *       201:
+ *         description: Categoria criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       400:
+ *         description: Nome e obrigatorio
+ *       401:
+ *         description: Token nao informado ou invalido
+ *       409:
+ *         description: Categoria ja existe
  */
 
 /**
@@ -518,4 +634,73 @@ module.exports = swaggerSpec;
  *         description: Token não informado ou inválido
  *       404:
  *         description: Deck não encontrado
+ */
+
+/**
+ * @swagger
+ * /api/decks/{deckId}/flashcards/{id}:
+ *   put:
+ *     summary: Atualiza um flashcard de um deck do usuário autenticado
+ *     tags: [Flashcards]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deckId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - question
+ *               - answer
+ *             properties:
+ *               question:
+ *                 type: string
+ *               answer:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Flashcard atualizado
+ *       400:
+ *         description: deckId, id ou corpo inválido
+ *       401:
+ *         description: Token não informado ou inválido
+ *       404:
+ *         description: Flashcard não encontrado
+ *   delete:
+ *     summary: Remove um flashcard de um deck do usuário autenticado
+ *     tags: [Flashcards]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deckId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Flashcard removido
+ *       400:
+ *         description: deckId ou id inválido
+ *       401:
+ *         description: Token não informado ou inválido
+ *       404:
+ *         description: Flashcard não encontrado
  */

@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String
+  userId Int?
+  user   User?   @relation(fields: [userId], references: [id])
+  decks  Deck[]
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   name          String
@@ -15,12 +23,7 @@ model User {
   role          String         @default("user")
   decks         Deck[]
   studySessions StudySession[]
-}
-
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  decks Deck[]
+  categories    Category[]
 }
 
 model Deck {

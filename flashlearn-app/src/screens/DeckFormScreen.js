@@ -20,6 +20,28 @@ export default function DeckFormScreen({ navigation }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
+  const [showNewCategory, setShowNewCategory] = useState(false);
+
+async function handleCreateCategory() {
+  if (!newCategory.trim()) {
+    Alert.alert("Erro", "Digite o nome da categoria");
+    return;
+  }
+
+  try {
+    const response = await api.post("/categories", { name: newCategory.trim() });
+    setCategories((prev) => [...prev, response.data]);
+    setSelectedCategoryId(response.data.id);
+    setNewCategory("");
+    setShowNewCategory(false);
+  } catch (error) {
+    Alert.alert(
+      "Erro",
+      error.response?.data?.error || "Erro ao criar categoria"
+    );
+  }
+}
 
   const fetchCategories = useCallback(async () => {
     const { data } = await api.get("/categories");
@@ -148,7 +170,7 @@ export default function DeckFormScreen({ navigation }) {
             <ActivityIndicator color="#4F8EF7" style={styles.categoriesLoader} />
           ) : categories.length === 0 ? (
             <Text style={styles.emptyCategories}>
-              Nenhuma categoria no servidor. Na API, execute: npx prisma db seed
+              Nenhuma categoria disponível.
             </Text>
           ) : (
             <View style={styles.chips}>
@@ -171,6 +193,35 @@ export default function DeckFormScreen({ navigation }) {
             </View>
           )}
         </View>
+
+        <TouchableOpacity
+          style={styles.newCategoryButton}
+          onPress={() => setShowNewCategory(!showNewCategory)}
+        >
+          <Text style={styles.newCategoryButtonText}>
+            {showNewCategory ? "Cancelar" : "+ Criar nova categoria"}
+          </Text>
+        </TouchableOpacity>
+
+        {showNewCategory && (
+          <View style={styles.newCategoryContainer}>
+            <Text style={styles.label}>NOVA CATEGORIA</Text>
+            <TextInput
+              style={styles.input}
+              value={newCategory}
+              onChangeText={setNewCategory}
+              placeholder="Nome da categoria"
+              placeholderTextColor="#484F58"
+              autoCapitalize="words"
+            />
+            <TouchableOpacity
+              style={styles.createCategoryButton}
+              onPress={handleCreateCategory}
+            >
+              <Text style={styles.createCategoryButtonText}>Criar e selecionar</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <TouchableOpacity
           style={[styles.button, submitting && styles.buttonDisabled]}
@@ -287,4 +338,33 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0.5,
   },
+  newCategoryButton: {
+  alignItems: "center",
+  paddingVertical: 8,
+},
+newCategoryButtonText: {
+  color: "#4F8EF7",
+  fontSize: 14,
+  fontWeight: "600",
+},
+newCategoryContainer: {
+  gap: 8,
+  backgroundColor: "#161B22",
+  borderRadius: 10,
+  borderWidth: 1,
+  borderColor: "#30363D",
+  padding: 16,
+},
+createCategoryButton: {
+  backgroundColor: "#4F8EF7",
+  borderRadius: 10,
+  height: 44,
+  alignItems: "center",
+  justifyContent: "center",
+},
+createCategoryButtonText: {
+  color: "#F0F6FC",
+  fontSize: 14,
+  fontWeight: "600",
+},
 });

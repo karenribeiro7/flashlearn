@@ -22,11 +22,14 @@ export default function StudyScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
 
   const flipAnim = useRef(new Animated.Value(0)).current;
+  const wrongCardIds = useRef(new Set());
 
   useEffect(() => {
     async function fetchCards() {
       try {
         const response = await api.post("/study-sessions/start", { deckId });
+        wrongCardIds.current = new Set();
+        setCorrectCards(0);
         setFlashcards(response.data.flashcards);
         setSessionCards(response.data.flashcards);
       } catch (error) {
@@ -74,8 +77,13 @@ export default function StudyScreen({ route, navigation }) {
   }
 
   async function handleCorrect() {
-    const newCorrectCards = correctCards + 1;
-    setCorrectCards(newCorrectCards);
+    const card = sessionCards[currentIndex];
+    const isFirstTry = card && !wrongCardIds.current.has(card.id);
+    const newCorrectCards = isFirstTry ? correctCards + 1 : correctCards;
+
+    if (isFirstTry) {
+      setCorrectCards(newCorrectCards);
+    }
 
     const remaining = sessionCards.filter((_, i) => i !== currentIndex);
 
@@ -91,6 +99,9 @@ export default function StudyScreen({ route, navigation }) {
 
   function handleWrong() {
     const card = sessionCards[currentIndex];
+    if (card?.id != null) {
+      wrongCardIds.current.add(card.id);
+    }
     const remaining = sessionCards.filter((_, i) => i !== currentIndex);
     remaining.push(card);
     setSessionCards(remaining);

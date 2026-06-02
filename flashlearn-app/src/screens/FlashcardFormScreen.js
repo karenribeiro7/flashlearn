@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import api from "../services/api";
 
 export default function FlashcardFormScreen({ navigation }) {
@@ -21,6 +21,23 @@ export default function FlashcardFormScreen({ navigation }) {
   const [answer, setAnswer] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  useFocusEffect(
+    useCallback(() => {
+      const flashcard = route.params?.flashcard;
+      if (flashcard?.id) {
+        setQuestion(flashcard.question ?? "");
+        setAnswer(flashcard.answer ?? "");
+      } else {
+        setQuestion("");
+        setAnswer("");
+      }
+    }, [route.params?.flashcard?.id])
+  );
+
+  const editingFlashcard = route.params?.flashcard?.id
+    ? route.params.flashcard
+    : null;
+
   async function handleSubmit() {
     if (!question.trim()) {
       Alert.alert("Atenção", "Informe a pergunta");
@@ -31,19 +48,34 @@ export default function FlashcardFormScreen({ navigation }) {
       return;
     }
 
+    const payload = {
+      question: question.trim(),
+      answer: answer.trim(),
+    };
+
     try {
       setSubmitting(true);
-      await api.post(`/decks/${deckId}/flashcards`, {
-        question: question.trim(),
-        answer: answer.trim(),
-      });
-      Alert.alert("Sucesso", "Flashcard criado com sucesso", [
-        { text: "OK", onPress: () => navigation.goBack() },
-      ]);
+      if (editingFlashcard) {
+        await api.put(
+          `/decks/${deckId}/flashcards/${editingFlashcard.id}`,
+          payload
+        );
+        Alert.alert("Sucesso", "Flashcard atualizado com sucesso", [
+          { text: "OK", onPress: () => navigation.goBack() },
+        ]);
+      } else {
+        await api.post(`/decks/${deckId}/flashcards`, payload);
+        Alert.alert("Sucesso", "Flashcard criado com sucesso", [
+          { text: "OK", onPress: () => navigation.goBack() },
+        ]);
+      }
     } catch (error) {
       Alert.alert(
         "Erro",
-        error.response?.data?.error || "Erro ao criar flashcard"
+        error.response?.data?.error ||
+          (editingFlashcard
+            ? "Erro ao atualizar flashcard"
+            : "Erro ao criar flashcard")
       );
     } finally {
       setSubmitting(false);
@@ -56,7 +88,9 @@ export default function FlashcardFormScreen({ navigation }) {
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.title}>Novo flashcard</Text>
+      <Text style={styles.title}>
+        {editingFlashcard ? "Editar flashcard" : "Novo flashcard"}
+      </Text>
       {deckTitle ? (
         <Text style={styles.subtitle}>Deck: {deckTitle}</Text>
       ) : (
@@ -98,7 +132,9 @@ export default function FlashcardFormScreen({ navigation }) {
           {submitting ? (
             <ActivityIndicator color="#0D1117" />
           ) : (
-            <Text style={styles.buttonText}>Criar flashcard</Text>
+            <Text style={styles.buttonText}>
+              {editingFlashcard ? "Salvar alterações" : "Criar flashcard"}
+            </Text>
           )}
         </TouchableOpacity>
       </View>
