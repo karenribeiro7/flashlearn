@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { API_URL } from "@env";
 import {
   View,
   Text,
@@ -7,6 +8,7 @@ import {
   StatusBar,
   Animated,
   Alert,
+  Image
 } from "react-native";
 import api from "../services/api";
 
@@ -193,12 +195,26 @@ export default function StudyScreen({ route, navigation }) {
         <Animated.View style={[styles.card, styles.cardFront, frontAnimatedStyle]}>
           <Text style={styles.cardLabel}>PERGUNTA</Text>
           <Text style={styles.cardText}>{currentCard?.question}</Text>
+          {currentCard?.imageUrl && (
+            <Image
+              source={{ uri: `${API_URL.replace("/api", "")}${currentCard.imageUrl}` }}
+              style={styles.cardImage}
+              resizeMode="contain"
+            />
+          )}
           <Text style={styles.cardHint}>Toque para ver a resposta</Text>
         </Animated.View>
 
         <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle]}>
           <Text style={[styles.cardLabel, styles.cardLabelBack]}>RESPOSTA</Text>
           <Text style={styles.cardText}>{currentCard?.answer}</Text>
+          {currentCard?.imageBackUrl && (
+            <Image
+              source={{ uri: `${API_URL.replace("/api", "")}${currentCard.imageBackUrl}` }}
+              style={styles.cardImage}
+              resizeMode="contain"
+            />
+          )}
         </Animated.View>
       </TouchableOpacity>
 
@@ -325,6 +341,12 @@ const styles = StyleSheet.create({
     color: "#484F58",
     position: "absolute",
     bottom: 24,
+  },
+  cardImage: {
+    width: "100%",
+    height: 255,
+    borderRadius: 10,
+    marginTop: 8,
   },
   actions: {
     flexDirection: "row",
