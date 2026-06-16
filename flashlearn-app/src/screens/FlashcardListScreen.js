@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useLayoutEffect } from "react";
+import { API_URL } from "@env";
 import {
   View,
   Text,
@@ -8,6 +9,7 @@ import {
   Alert,
   RefreshControl,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -133,6 +135,13 @@ export default function FlashcardListScreen() {
           <View style={styles.cardBody}>
             <Text style={styles.cardLabel}>PERGUNTA</Text>
             <Text style={styles.cardQuestion}>{item.question}</Text>
+              {item.imageUrl && (
+                <Image
+                  source={{ uri: `${API_URL.replace("/api", "")}${item.imageUrl}` }}
+                  style={styles.cardImage}
+                  resizeMode="cover"
+                />
+              )}
             <Text style={[styles.cardLabel, styles.cardLabelAnswer]}>RESPOSTA</Text>
             <Text style={styles.cardAnswer} numberOfLines={2}>
               {item.answer}
@@ -148,6 +157,8 @@ export default function FlashcardListScreen() {
                     id: item.id,
                     question: item.question,
                     answer: item.answer,
+                    imageUrl: item.imageUrl,
+                    imageBackUrl: item.imageBackUrl,
                   },
                 })
               }
@@ -302,6 +313,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#F0F6FC",
     lineHeight: 22,
+  },
+  cardImage: {
+    width: "100%",
+    height: 120,
+    borderRadius: 10,
+    marginTop: 8,
   },
   cardAnswer: {
     fontSize: 15,

@@ -2,6 +2,7 @@ import React from "react";
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
@@ -13,9 +14,11 @@ export default function WelcomeScreen({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor="#0D1117" />
 
       <View style={styles.logoContainer}>
-        <View style={styles.logoPlaceholder}>
-          <Text style={styles.logoPlaceholderText}>FL</Text>
-        </View>
+        <Image
+          source={require("../../assets/Logo_FlashLearn.png")}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={styles.appName}>FlashLearn</Text>
         <Text style={styles.tagline}>Estude mais. Aprenda melhor.</Text>
       </View>
@@ -53,22 +56,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  logoPlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 24,
-    backgroundColor: "#4F8EF720",
-    borderWidth: 1,
-    borderColor: "#4F8EF740",
-    justifyContent: "center",
-    alignItems: "center",
+  logo: {
+    width: 150,
+    height: 150,
     marginBottom: 8,
-  },
-  logoPlaceholderText: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#4F8EF7",
-    letterSpacing: 2,
   },
   appName: {
     fontSize: 32,
