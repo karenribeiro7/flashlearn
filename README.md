@@ -68,4 +68,3 @@ API_URL=http://SEU_IP_AQUI:3000/api
 - Segurança: Um usuário nunca pode acessar baralhos de terceiros.
 - Estudo: Uma sessão só pode começar se o baralho tiver ao menos um card e só termina quando todos forem acertados.
 - Integridade: Ao deletar um baralho, todos os seus cards e sessões são apagados (deleção em cascata).
-```
