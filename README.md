@@ -34,7 +34,7 @@ Antes de iniciar, é necessário criar os arquivos .env manualmente:
 
 DATABASE_URL="file:./dev.db"
 
-JWT_SECRET="618062a4a235cb801b25b06a1e340d6bd064f29953f8c8175d3693c753f79e55"
+JWT_SECRET="insira_um_secret_aqui"
 
 IP_ADDRESS="SEU_IP_AQUI"
 
